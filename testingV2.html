@@ -13,7 +13,7 @@
       const influx2 = new InfluxDB({url,token });
 
       let query2 = 'from(bucket: "NoiceData")\
-      |> range(start: -12h)\
+      |> range(start: -18h)\
       |> filter(fn: (r) => r["_measurement"] == "my_data")\
       |> filter(fn: (r) => r["DB"] == "db2")\
       |> filter(fn: (r) => r["_field"] == "VolumeNorm")\
