@@ -24,8 +24,9 @@
         queryApi.queryRows(fluxQuery, {
             next(row, tableMeta) {
                 const o = tableMeta.toObject(row);
+                console.log(typeof o);
 //                 console.log(o)
-                console.log(o._value);
+                // console.log(o._value);
                 document.getElementById("template").innerHTML += o._value + "<br>";
             },
             complete() {
