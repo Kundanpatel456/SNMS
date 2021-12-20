@@ -1,0 +1,50 @@
+<html>
+<head>
+<title>Home</title>
+</head>
+  <body>
+    <script type="module">
+      import {InfluxDB, Point} from 'https://unpkg.com/@influxdata/influxdb-client-browser/dist/index.browser.mjs';
+
+      let url="https://us-east-1-1.aws.cloud2.influxdata.com";
+      let token="ln5ELJg_u7btzE8YRLMa2kQaL1B6rIPresrwxHx87xYFXQiYDqLXieQsoMqHVJ4JTwQr1tJXryFuJ-L6bCNwFA==";
+      let org="Rpi-Project";
+
+      const influx2 = new InfluxDB({url,token });
+
+      let query2 = 'from(bucket: "NoiceData")\
+      |> range(start: -1s)\
+      |> filter(fn: (r) => r["_measurement"] == "my_data")\
+      |> filter(fn: (r) => r["DB"] == "db2")\
+      |> filter(fn: (r) => r["_field"] == "VolumeNorm")\
+      |> yield(name: "mean")'
+
+      function queryExample(fluxQuery) {
+        const queryApi = new InfluxDB({url, token}).getQueryApi(org)
+        queryApi.queryRows(fluxQuery, {
+            next(row, tableMeta) {
+                const o = tableMeta.toObject(row);
+                console.log(o)
+                console.log(o._value);
+                document.getElementById("template").innerHTML += o._value + "<br>";
+            },
+            complete() {
+                console.log('FINISHED')
+            },
+            error(error) {
+                console.log('QUERY FAILED', error)
+            },
+        });
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    queryExample(query2);
+
+    </script>
+
+<p id="template"></p>
+    </body>
+</html>
