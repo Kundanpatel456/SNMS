@@ -13,7 +13,7 @@
       const influx2 = new InfluxDB({url,token });
 
       let query2 = 'from(bucket: "NoiceData")\
-      |> range(start: -22h)\
+      |> range(start: -22h, stop: -21h)\
       |> filter(fn: (r) => r["_measurement"] == "my_data")\
       |> filter(fn: (r) => r["DB"] == "db2")\
       |> filter(fn: (r) => r["_field"] == "VolumeNorm")\
@@ -24,7 +24,7 @@
         queryApi.queryRows(fluxQuery, {
             next(row, tableMeta) {
                 const o = tableMeta.toObject(row);
-                console.log(o)
+//                 console.log(o)
                 console.log(o._value);
                 document.getElementById("template").innerHTML += o._value + "<br>";
             },
